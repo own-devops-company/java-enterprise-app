@@ -17,7 +17,7 @@ node{
     stage(" Maven Clean Package"){
       sh "${mavenHome}/bin/mvn clean package"
       } 
-    
+/*    
     stage ('GenerateSonarQubeReport')
     {
         sh "${mavenHome}/bin/mvn clean sonar:sonar"
@@ -27,30 +27,35 @@ stage ('UploadArtifactNexus')
     {
         sh "${mavenHome}/bin/mvn deploy"
     }
-  /*   
+     */
     stage('Build Docker Image'){
-        sh 'docker build -t dockerhandson/java-web-app .'
+         
+         sshagent(['DOCKER_SERVER']) {
+          sh 'ssh -o StrictHostKeyChecking=no centos@3.7.45.160 docker build -t saianuroop/javawebapp:${env.BUILD_NUMBER} . || true'
+       }        
     }
     
     stage('Push Docker Image'){
-        withCredentials([string(credentialsId: 'Docker_Hub_Pwd', variable: 'Docker_Hub_Pwd')]) {
-          sh "docker login -u dockerhandson -p ${Docker_Hub_Pwd}"
+         
+         sshagent(['DOCKER_SERVER']) {
+           withCredentials([string(credentialsId: 'Docker_Hub_Pwd', variable: 'Docker_Hub_Pwd')]) {
+          sh "ssh centos@3.7.45.160 docker login -u saianuroop -p ${Docker_Hub_Pwd}"          
         }
-        sh 'docker push dockerhandson/java-web-app'
+          sh 'ssh centos@3.7.45.160 docker push saianuroop/javawebapp* || true'      
+       }             
      }
      
       stage('Run Docker Image In Dev Server'){
         
-        def dockerRun = ' docker run  -d -p 8080:8080 --name java-web-app dockerhandson/java-web-app'
+        def dockerRun = ' docker run  -d -p 8080:8080 --name java-web-app saianuroop/javawebapp'
          
-         sshagent(['DOCKER_SERVER']) {
-          sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.20.72 docker stop java-web-app || true'
-          sh 'ssh  ubuntu@172.31.20.72 docker rm java-web-app || true'
-          sh 'ssh  ubuntu@172.31.20.72 docker rmi -f  $(docker images -q) || true'
-          sh "ssh  ubuntu@172.31.20.72 ${dockerRun}"
+         sshagent(['DOCKER_DEPLOY']) {
+          sh 'ssh -o StrictHostKeyChecking=no centos@13.127.83.158 docker stop java-web-app || true'
+          sh 'ssh  centos@13.127.83.158 docker rm java-web-app || true'
+          sh 'ssh  centos@13.127.83.158 docker rmi -f  $(docker images -q) || true'
+          sh "ssh  centos@13.127.83.158 ${dockerRun}"
        }
        
     }
-    */ 
      
 }
