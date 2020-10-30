@@ -27,7 +27,7 @@ stage ('UploadArtifactNexus')
     {
         sh "${mavenHome}/bin/mvn deploy"
     }
-     
+  /*   
     stage('Build Docker Image'){
         sh 'docker build -t dockerhandson/java-web-app .'
     }
@@ -51,6 +51,6 @@ stage ('UploadArtifactNexus')
        }
        
     }
-     
+    */ 
      
 }
