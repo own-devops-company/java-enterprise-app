@@ -1,17 +1,33 @@
 node{
      
+     def mavenHome = tool name: "maven3.6.3"
+     
+     echo "GitHub BranhName ${env.BRANCH_NAME}"
+      echo "Jenkins Job Number ${env.BUILD_NUMBER}"
+      echo "Jenkins Node Name ${env.NODE_NAME}"
+  
+      echo "Jenkins Home ${env.JENKINS_HOME}"
+      echo "Jenkins URL ${env.JENKINS_URL}"
+      echo "JOB Name ${env.JOB_NAME}"
+     
     stage('SCM Checkout'){
-        git url: 'https://github.com/MithunTechnologiesDevOps/java-web-app-docker.git',branch: 'master'
+        git branch: 'master', credentialsId: '65fb834f-a83b-4fe7-8e11-686245c47a65', url: 'https://github.com/own-devops-company/java-webapp-docker.git'
     }
     
     stage(" Maven Clean Package"){
-      def mavenHome =  tool name: "Maven-3.5.6", type: "maven"
-      def mavenCMD = "${mavenHome}/bin/mvn"
-      sh "${mavenCMD} clean package"
-      
-    } 
+      sh "${mavenHome}/bin/mvn clean package"
+      } 
     
-    
+    stage ('GenerateSonarQubeReport')
+    {
+        sh "${mavenHome}/bin/mvn clean sonar:sonar"
+    }
+
+stage ('UploadArtifactNexus')
+    {
+        sh "${mavenHome}/bin/mvn deploy"
+    }
+     
     stage('Build Docker Image'){
         sh 'docker build -t dockerhandson/java-web-app .'
     }
