@@ -30,14 +30,14 @@ stage ('UploadArtifactNexus')
      */
     stage('Build Docker Image'){
          
-         sshagent(['DOCKER_SERVER']) {
+         sshagent(['Dock_Ser']) {
           sh 'ssh -o StrictHostKeyChecking=no centos@3.7.45.160 docker build -t saianuroop/javawebapp:${env.BUILD_NUMBER} . || true'
        }        
     }
     
     stage('Push Docker Image'){
          
-         sshagent(['DOCKER_SERVER']) {
+         sshagent(['Dock_Ser']) {
            withCredentials([string(credentialsId: 'Docker_Hub_Pwd', variable: 'Docker_Hub_Pwd')]) {
           sh "ssh centos@3.7.45.160 docker login -u saianuroop -p ${Docker_Hub_Pwd}"          
         }
@@ -47,9 +47,9 @@ stage ('UploadArtifactNexus')
      
       stage('Run Docker Image In Dev Server'){
         
-        def dockerRun = ' docker run  -d -p 8080:8080 --name java-web-app saianuroop/javawebapp'
+        def dockerRun = ' docker run  -d -p 7070:8080 --name java-web-app saianuroop/javawebapp*'
          
-         sshagent(['DOCKER_DEPLOY']) {
+         sshagent(['Dock_Dep']) {
           sh 'ssh -o StrictHostKeyChecking=no centos@13.127.83.158 docker stop java-web-app || true'
           sh 'ssh  centos@13.127.83.158 docker rm java-web-app || true'
           sh 'ssh  centos@13.127.83.158 docker rmi -f  $(docker images -q) || true'
