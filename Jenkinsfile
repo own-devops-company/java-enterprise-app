@@ -30,14 +30,14 @@ stage ('UploadArtifactNexus')
      */
     stage('Build Docker Image'){
          
-         sshagent(['Dock_Ser']) {
+         sshagent(['Dok-Dep']) {
           sh 'ssh -o StrictHostKeyChecking=no centos@3.7.45.160 docker build -t saianuroop/javawebapp . || true'
        }        
     }
     
     stage('Push Docker Image'){
          
-         sshagent(['Dock_Ser']) {
+         sshagent(['Dok-Dep']) {
            withCredentials([string(credentialsId: 'Docker_Hub_Pwd', variable: 'Docker_Hub_Pwd')]) {
           sh "ssh centos@3.7.45.160 docker login -u saianuroop -p ${Docker_Hub_Pwd}"          
         }
