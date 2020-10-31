@@ -31,7 +31,7 @@ stage ('UploadArtifactNexus')
     stage('Build Docker Image'){
          
          sshagent(['Dok-Img']) {
-          sh 'ssh -o StrictHostKeyChecking=no centos@3.7.45.160 docker build -t saianuroop/javawebapp":$BUILD_NUMBER" . || true'
+          sh 'ssh -o StrictHostKeyChecking=no centos@3.7.45.160 docker build -t saianuroop/javawebapp":$BUILD_NUMBER" 'https://github.com/own-devops-company/java-webapp-docker.git' || true'
        }        
     }
     
