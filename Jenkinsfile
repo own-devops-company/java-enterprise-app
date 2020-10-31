@@ -1,6 +1,7 @@
 node{
      
      def mavenHome = tool name: "maven3.6.3"
+     def giturl = "https://github.com/own-devops-company/java-webapp-docker.git"
      
      echo "GitHub BranhName ${env.BRANCH_NAME}"
       echo "Jenkins Job Number ${env.BUILD_NUMBER}"
@@ -31,7 +32,7 @@ stage ('UploadArtifactNexus')
     stage('Build Docker Image'){
          
          sshagent(['Dok-Img']) {
-          sh 'ssh -o StrictHostKeyChecking=no centos@3.7.45.160 docker build -t saianuroop/javawebapp":$BUILD_NUMBER" 'https://github.com/own-devops-company/java-webapp-docker.git' || true'
+          sh 'ssh -o StrictHostKeyChecking=no centos@3.7.45.160 docker build -t saianuroop/javawebapp":$BUILD_NUMBER" "${giturl}" || true'
        }        
     }
     
@@ -47,7 +48,7 @@ stage ('UploadArtifactNexus')
      
       stage('Run Docker Image In Dev Server'){
         
-        def dockerRun = ' docker run  -d -p 7070:8080 --name java-web-app saianuroop/javawebapp*'
+        def dockerRun = 'docker run  -d -p 7070:8080 --name java-web-app saianuroop/javawebapp*'
          
          sshagent(['Dock_Dep']) {
           sh 'ssh -o StrictHostKeyChecking=no centos@13.127.83.158 docker stop java-web-app || true'
