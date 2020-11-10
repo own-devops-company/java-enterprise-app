@@ -36,7 +36,7 @@ stage ('UploadArtifactNexus')
     
     stage('Login Docker Push'){
          
-         sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 942288870879.dkr.ecr.ap-south-1.amazonaws.com'
+        // sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 942288870879.dkr.ecr.ap-south-1.amazonaws.com'
          sh 'docker push 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp'":$BUILD_NUMBER"       
      }
   /*   
