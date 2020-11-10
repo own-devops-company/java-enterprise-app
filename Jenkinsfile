@@ -36,11 +36,12 @@ stage ('UploadArtifactNexus')
     
     stage('Login Docker Push'){
         
-         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY', credentialsId: 'AWS_Access', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-              sh 'docker login -u ${AWS_ACCESS_KEY} -p  ${AWS_SECRET_ACCESS_KEY}'
+         docker.withRegistry('https://942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp', 'ecr:ap-south-1:AWS_Access')
+         {
+              docker.image('javawebapp').push('latest')
          }
         // sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 942288870879.dkr.ecr.ap-south-1.amazonaws.com'
-        sh 'docker push 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp'":$BUILD_NUMBER"       
+        //sh 'docker push 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp'":$BUILD_NUMBER"       
      }
   /*   
       stage('Pull Image Run Container'){
