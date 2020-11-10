@@ -31,32 +31,24 @@ stage ('UploadArtifactNexus')
      */
     stage('Build Docker Image'){
          
-         sshagent(['Dok-Img']) {
-          sh 'docker build -t saianuroop/javawebapp":$BUILD_NUMBER" . || true'
-       }        
+          sh 'docker build -t saianuroop/javawebapp":$BUILD_NUMBER" . || true'              
     }
     
-    stage('Push Docker Image'){
+    stage('Login Docker Push'){
          
-         sshagent(['Dok-Img']) {
-           withDockerRegistry(credentialsId: 'Dok-Cred', url: 'https://hub.docker.com/') {
-          sh "ssh centos@3.7.45.160 docker login -u saianuroop -p ${Dok-Cred}"          
-        }
-          sh 'ssh centos@3.7.45.160 docker push saianuroop/javawebapp* || true'      
-       }             
+         sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 942288870879.dkr.ecr.ap-south-1.amazonaws.com'
+         sh 'docker push 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp":$BUILD_NUMBER"'       
      }
-     
-      stage('Run Docker Image In Dev Server'){
-        
-        def dockerRun = 'docker run  -d -p 7070:8080 --name java-web-app saianuroop/javawebapp*'
+  /*   
+      stage('Pull Image Run Container'){
          
          sshagent(['Dock_Dep']) {
           sh 'ssh -o StrictHostKeyChecking=no centos@13.127.83.158 docker stop java-web-app || true'
-          sh 'ssh  centos@13.127.83.158 docker rm java-web-app || true'
+          sh 'ssh  centos@13.127.83.158 docker rm javawebapp || true'
           sh 'ssh  centos@13.127.83.158 docker rmi -f  $(docker images -q) || true'
-          sh "ssh  centos@13.127.83.158 ${dockerRun}"
+          sh 'ssh  centos@13.127.83.158 '
        }
        
     }
-     
+     */
 }
