@@ -36,7 +36,7 @@ stage ('UploadArtifactNexus')
     
     stage('Login Docker Push'){
 
-         withDockerRegistry(credentialsId: 'AWS', url: 'https://https://942288870879.dkr.ecr.ap-south-1.amazonaws.com') {
+         withDockerRegistry(credentialsId: 'AWS', url: 'https://942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapps') {
          docker.image('javawebapp').push('latest')
          }
 //          docker.withRegistry('https://942288870879.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:ap-south-1:AWS_Access') {
