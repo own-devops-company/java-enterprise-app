@@ -31,7 +31,7 @@ stage ('UploadArtifactNexus')
      */
     stage('Build Docker Image'){
          
-          sh 'docker build -t saianuroop/javawebapp":$BUILD_NUMBER" . || true'              
+          sh 'docker build -t 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp":$BUILD_NUMBER" . || true'              
     }
     
     stage('Login Docker Push'){
