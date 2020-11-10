@@ -35,10 +35,13 @@ stage ('UploadArtifactNexus')
     }
     
     stage('Login Docker Push'){
-        
-              //docker.image('javawebapp').push('latest')
+
+          docker.withRegistry('942288870879.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:ap-south-1:AWS_Access') {
+               docker.image('javawebapp').push('latest')
+          }
+              docker.image('javawebapp').push('latest')
         // sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 942288870879.dkr.ecr.ap-south-1.amazonaws.com'
-        sh "docker push 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp:$BUILD_NUMBER"       
+        //sh "docker push 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp:$BUILD_NUMBER"       
      }
   /*   
       stage('Pull Image Run Container'){
