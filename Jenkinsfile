@@ -35,6 +35,7 @@ node{
          
          sshagent(['Dok-Dep']) {
           sh 'ssh -o StrictHostKeyChecking=no centos@13.127.52.177 mkdir /home/centos/sai_test'
+          sh 'ssh  centos@13.127.52.177 touch /home/centos/sai_test/anuroop.txt'
       /*  sh 'ssh -o StrictHostKeyChecking=no centos@13.127.52.177 docker stop javawebapp' || true
           sh 'ssh  centos@13.127.52.177 docker rm javawebapp' || true
           sh 'ssh  centos@13.127.52.177 docker rmi -f  $(docker images -q)' || true
