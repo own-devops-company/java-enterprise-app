@@ -36,7 +36,7 @@ node{
           sh 'ssh centos@13.127.52.177 docker rmi -f  $(docker images -q)'
           sh "ssh centos@13.127.52.177 'eval \$(aws ecr get-login --no-include-email --region ap-south-1)'"
           sh 'ssh centos@13.127.52.177 docker rm javawebapp || true'
-          sh 'ssh centos@13.127.52.177 docker pull 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp'
+          sh "ssh centos@13.127.52.177 docker pull 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp:${buildNumber}"
           sh 'ssh centos@13.127.52.177 docker run -d -p 8080:8080 --name javaapps 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp'
        }       
     }
