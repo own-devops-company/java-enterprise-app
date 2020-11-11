@@ -20,17 +20,6 @@ node{
     stage(" Maven Clean Package"){
       sh "${mavenHome}/bin/mvn clean package"
       } 
-/*    
-    stage ('GenerateSonarQubeReport')
-    {
-        sh "${mavenHome}/bin/mvn clean sonar:sonar"
-    }
-
-stage ('UploadArtifactNexus')
-    {
-        sh "${mavenHome}/bin/mvn deploy"
-    }
-     */
      
       stage('Build Docker Image') {
           app = docker.build "942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp:${buildNumber}"
@@ -42,33 +31,17 @@ stage ('UploadArtifactNexus')
           }
       }
 
-
-    /**stage('Build Docker Image'){
-         
-          sh 'docker build -t 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp":$BUILD_NUMBER" . || true'              
-    }
-    
-    stage('Login Docker Push'){
-
-         withDockerRegistry(credentialsId: 'AWS_Access', url: 'https://942288870879.dkr.ecr.ap-south-1.amazonaws.com') {
-         docker.image('javawebapp').push('latest')
-         }**/
-//          docker.withRegistry('https://942288870879.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:ap-south-1:AWS_Access') {
-//               docker.image('javawebapp').push('latest')
-//          }
-        // sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 942288870879.dkr.ecr.ap-south-1.amazonaws.com'
-        //sh "docker push 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp:$BUILD_NUMBER"       
-  /*   
       stage('Pull Image Run Container'){
          
          sshagent(['Dock_Dep']) {
-          sh 'ssh -o StrictHostKeyChecking=no centos@13.127.83.158 docker stop java-web-app || true'
-          sh 'ssh  centos@13.127.83.158 docker rm javawebapp || true'
-          sh 'ssh  centos@13.127.83.158 docker rmi -f  $(docker images -q) || true'
-          sh 'ssh  centos@13.127.83.158 '
+              docker.withRegistry('https://942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp','ecr:ap-south-1:awsCred') {
+              app.pull("${buildNumber}")
+              }
+          sh 'ssh -o StrictHostKeyChecking=no centos@13.127.52.177 docker stop javawebapp || true'
+          sh 'ssh  centos@13.127.52.177 docker rm javawebapp || true'
+          sh 'ssh  centos@13.127.52.177 docker rmi -f  $(docker images -q) || true'
+          sh 'ssh  centos@13.127.52.177 docker run -d -p 8080:8080 --name javaapps 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp'
        }
        
     }
-     */
-
 }
