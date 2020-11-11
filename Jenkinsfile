@@ -37,7 +37,7 @@ stage ('UploadArtifactNexus')
       }
     
       stage('Push image') {
-          docker.withRegistry('https://942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp','ecr:ap-south-1:AWS_Access') {
+          docker.withRegistry('https://942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp','ecr:ap-south-1:awsCred') {
               app.push("${buildNumber}")
           }
       }
