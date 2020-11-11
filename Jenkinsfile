@@ -34,9 +34,6 @@ node{
       stage('Pull Image Run Container'){
          
          sshagent(['Dock_Dep']) {
-              docker.withRegistry('https://942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp','ecr:ap-south-1:awsCred') {
-              app.pull("${buildNumber}")
-              }
           sh 'ssh -o StrictHostKeyChecking=no centos@13.127.52.177 docker stop javawebapp || true'
           sh 'ssh  centos@13.127.52.177 docker rm javawebapp || true'
           sh 'ssh  centos@13.127.52.177 docker rmi -f  $(docker images -q) || true'
