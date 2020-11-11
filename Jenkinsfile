@@ -35,10 +35,10 @@ node{
          
          sshagent(['Dok-Dep']) {
           sh 'ssh -o StrictHostKeyChecking=no centos@13.127.52.177 aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 942288870879.dkr.ecr.ap-south-1.amazonaws.com'   
-          sh 'ssh -o StrictHostKeyChecking=no centos@13.127.52.177 docker stop javawebapp' || true
-          sh 'ssh  centos@13.127.52.177 docker rm javawebapp' || true
-          sh 'ssh  centos@13.127.52.177 docker rmi -f  $(docker images -q)' || true
-          sh 'ssh  centos@13.127.52.177 docker run -d -p 8080:8080 --name javaapps 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp'
+          sh 'ssh centos@13.127.52.177 docker stop javawebapp'
+          sh 'ssh centos@13.127.52.177 docker rm javawebapp'
+          sh 'ssh centos@13.127.52.177 docker rmi -f  $(docker images -q)'
+          sh 'ssh centos@13.127.52.177 docker run -d -p 8080:8080 --name javaapps 942288870879.dkr.ecr.ap-south-1.amazonaws.com/javawebapp'
        }
        
     }
