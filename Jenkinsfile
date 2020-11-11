@@ -14,7 +14,7 @@ node{
       echo "JOB Name ${env.JOB_NAME}"
      
     stage('SCM Checkout'){
-        git branch: 'master', credentialsId: '65fb834f-a83b-4fe7-8e11-686245c47a65', url: 'https://github.com/own-devops-company/java-webapp-docker.git'
+         git branch: 'master', credentialsId: '65fb834f-a83b-4fe7-8e11-686245c47a65', url: "${giturl}"
     }
     
     stage(" Maven Clean Package"){
